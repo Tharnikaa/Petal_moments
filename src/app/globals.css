@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fcf4f6;
+  --foreground: #4a2e35;
+  --primary: #d4778d;      /* Deep rose pink from the lines */
+  --primary-foreground: #ffffff;
+  --secondary: #e8b1c0;    /* Medium watercolor pink */
+  --secondary-foreground: #4a2e35;
+  --accent: #f5d5de;       /* Light petal pink */
+  --accent-foreground: #4a2e35;
+  --muted: rgba(255, 255, 255, 0.5);
+  --muted-foreground: #9a6f7b;
+  --border: rgba(212, 119, 141, 0.25);
+  --card: rgba(255, 255, 255, 0.85); /* Glassmorphism */
+  --card-foreground: #4a2e35;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --font-sans: var(--font-inter);
+}
+
+body {
+  background-color: var(--background);
+  background-image: url('/image_bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--foreground);
+  font-family: var(--font-sans), sans-serif;
+}
