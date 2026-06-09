@@ -60,6 +60,18 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 - `/src/lib`: Core utility functions (Auth, Prisma, Holidays).
 - `/src/hooks`: Custom React hooks (useEvents).
 
+## Deployment (Vercel)
+
+The easiest way to deploy your Next.js app is to use [Vercel](https://vercel.com).
+
+### Important Environment Variables
+Make sure to configure the following environment variables in your Vercel project settings:
+
+- \`DATABASE_URL\`: Connection string to your database (Note: If using SQLite, your database will be ephemeral on Vercel. Consider switching to PostgreSQL like Supabase or Neon for production).
+- \`NEXTAUTH_SECRET\`: A random string used to hash tokens, sign/encrypt cookies and generate cryptographic keys.
+- \`NEXTAUTH_URL\`: The canonical URL of your site (e.g., \`https://your-app-url.vercel.app\`).
+- \`NEXT_PUBLIC_VAPID_PUBLIC_KEY\` & \`VAPID_PRIVATE_KEY\`: Required for Web Push Notifications.
+
 ## License
 
 This project is open-source and available under the MIT License.
