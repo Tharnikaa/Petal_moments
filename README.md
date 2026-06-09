@@ -64,10 +64,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 The easiest way to deploy your Next.js app is to use [Vercel](https://vercel.com).
 
+### Database Configuration for Vercel
+Because Vercel is a serverless platform, it requires a cloud database that accepts external connections.
+
+1. **Create a Database**: We recommend creating a free MySQL database on **[Aiven](https://aiven.io/)** or **[TiDB Serverless](https://en.pingcap.com/tidb-serverless/)**. Do not use shared hosting databases (like cPanel/StackCP) as they usually block external connections.
+2. **Set the Environment Variable**: In your Vercel project settings, set \`DATABASE_URL\` to your new cloud database connection string.
+3. **Automated Schema Push**: You do **not** need to manually build the database tables. Upon deployment, Vercel will automatically run \`prisma db push\` to generate all required tables (\`User\`, \`Event\`, etc.) in your new cloud database.
+
 ### Important Environment Variables
 Make sure to configure the following environment variables in your Vercel project settings:
 
-- \`DATABASE_URL\`: Connection string to your database (Note: If using SQLite, your database will be ephemeral on Vercel. Consider switching to PostgreSQL like Supabase or Neon for production).
+- \`DATABASE_URL\`: Connection string to your cloud database.
 - \`NEXTAUTH_SECRET\`: A random string used to hash tokens, sign/encrypt cookies and generate cryptographic keys.
 - \`NEXTAUTH_URL\`: The canonical URL of your site (e.g., \`https://your-app-url.vercel.app\`).
 - \`NEXT_PUBLIC_VAPID_PUBLIC_KEY\` & \`VAPID_PRIVATE_KEY\`: Required for Web Push Notifications.
