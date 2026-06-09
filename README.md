@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Birthday & Event Wish Automator 🎉
+
+A modern web application built with Next.js to keep track of birthdays, anniversaries, and special events. It automatically generates personalized wishes using AI and schedules email notifications.
+
+## Features
+
+- 📅 **Calendar View**: Manage and visualize all your upcoming events.
+- 🤖 **AI-Powered Wishes**: Automatically generate unique and personalized birthday or anniversary wishes.
+- ✉️ **Email Notifications**: Get notified or send wishes automatically via email on special days.
+- 🔐 **Authentication**: Secure user login and registration using NextAuth.
+- 🗄️ **Database**: Persistent storage using Prisma ORM.
+- 🎨 **Modern UI**: Clean, responsive, and beautiful interface.
+
+## Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Database**: [Prisma ORM](https://www.prisma.io/) (SQLite)
+- **Authentication**: [NextAuth.js](https://next-auth.js.org/)
+- **AI Integration**: AI-powered wish generation
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+ installed
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Tharnikaa/Wishes.git
+   cd Wishes
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Set up environment variables:
+   Create a `.env` file in the root directory and configure necessary variables (Database URL, NextAuth secret, Email config, etc.).
 
-## Learn More
+4. Initialize the database:
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+5. Run the development server:
+   ```bash
+   npm run dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the application running locally.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+- `/src/app`: Next.js App Router pages and API routes (auth, cron, events, generation).
+- `/src/components`: Reusable React components (Calendar, Modals, Cards).
+- `/prisma`: Database schema configurations.
+- `/src/lib`: Core utility functions (Auth, Prisma, Holidays).
+- `/src/hooks`: Custom React hooks (useEvents).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is open-source and available under the MIT License.
