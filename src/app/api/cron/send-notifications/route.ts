@@ -3,11 +3,13 @@ import { prisma } from '@/lib/prisma';
 import webpush from 'web-push';
 import { differenceInDays, parseISO, startOfDay } from 'date-fns';
 
-webpush.setVapidDetails(
-  'mailto:your-email@example.com',
-  process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY as string,
-  process.env.VAPID_PRIVATE_KEY as string
-);
+if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
+  webpush.setVapidDetails(
+    'mailto:your-email@example.com',
+    process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    process.env.VAPID_PRIVATE_KEY
+  );
+}
 
 export async function GET(request: Request) {
   // Simple auth check could be added here (e.g., checking a CRON_SECRET)
