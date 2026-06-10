@@ -109,7 +109,7 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
 
   const handleSendMail = async () => {
     if (!generatedWish) return;
-    const recipient = event.relationship.includes('Colleague') && event.email ? event.email : '';
+    const recipient = event.email ? event.email : '';
     if (!recipient) {
       setError('No email address found. Edit the event to add an email address first.');
       return;
