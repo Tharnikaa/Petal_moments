@@ -5,9 +5,11 @@ A modern web application built with Next.js to keep track of birthdays, annivers
 ## Features
 
 - 📅 **Calendar View**: Manage and visualize all your upcoming events.
-- 🤖 **AI-Powered Wishes**: Automatically generate unique and personalized birthday or anniversary wishes.
-- ✉️ **Email Notifications**: Get notified or send wishes automatically via email on special days.
-- 🔐 **Authentication**: Secure user login and registration using NextAuth.
+- 🤖 **AI-Powered Wishes**: Automatically generate unique and personalized birthday or anniversary wishes using the Gemini API.
+- ✉️ **Custom SMTP Email Integration**: Send automated wishes from your own email address directly through the app.
+- 🔔 **Web Push Notifications**: Receive background push notifications on your desktop or mobile device when an event is coming up.
+- ⏱️ **Customizable Notification Timing**: Choose to be reminded exactly 1 week before, 1 day before, and/or on the day of the event.
+- 🔐 **Authentication**: Secure user login, registration, and password reset functionality using NextAuth.
 - 🗄️ **Database**: Persistent storage using Prisma ORM.
 - 🎨 **Modern UI**: Clean, responsive, and beautiful interface.
 
