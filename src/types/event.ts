@@ -10,4 +10,7 @@ export interface Event {
   notes: string;
   email?: string;
   phone?: string;
+  notifyWeekBefore?: boolean;
+  notifyDayBefore?: boolean;
+  notifyOnDay?: boolean;
 }

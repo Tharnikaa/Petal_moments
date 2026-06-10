@@ -80,9 +80,12 @@ model Event {
   eventType    String
   relationship String
   notes        String?
-  email        String?
-  phone        String?
-  createdAt    DateTime @default(now())
+  email            String?
+  phone            String?
+  notifyWeekBefore Boolean  @default(true)
+  notifyDayBefore  Boolean  @default(true)
+  notifyOnDay      Boolean  @default(true)
+  createdAt        DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)

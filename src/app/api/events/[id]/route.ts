@@ -22,6 +22,9 @@ export async function PUT(request: Request, context: any) {
         notes: data.notes,
         email: data.email,
         phone: data.phone,
+        notifyWeekBefore: data.notifyWeekBefore,
+        notifyDayBefore: data.notifyDayBefore,
+        notifyOnDay: data.notifyOnDay,
       },
     });
 

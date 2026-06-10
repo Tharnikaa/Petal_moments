@@ -36,11 +36,11 @@ export async function GET(request: Request) {
 
       const daysUntil = differenceInDays(currentYearDate, today);
 
-      if (daysUntil === 0) {
+      if (daysUntil === 0 && event.notifyOnDay) {
         notificationsToSend.push({ title: 'Event Today!', body: `Today is ${event.name}'s ${event.eventType}! 🎉` });
-      } else if (daysUntil === 1) {
+      } else if (daysUntil === 1 && event.notifyDayBefore) {
         notificationsToSend.push({ title: 'Upcoming Event', body: `${event.name}'s ${event.eventType} is tomorrow! ⏰` });
-      } else if (daysUntil === 7) {
+      } else if (daysUntil === 7 && event.notifyWeekBefore) {
         notificationsToSend.push({ title: 'Upcoming Event', body: `${event.name}'s ${event.eventType} is in exactly one week! 📅` });
       }
     });

@@ -26,6 +26,9 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
+  const [notifyWeekBefore, setNotifyWeekBefore] = useState(true);
+  const [notifyDayBefore, setNotifyDayBefore] = useState(true);
+  const [notifyOnDay, setNotifyOnDay] = useState(true);
 
   useEffect(() => {
     if (eventToEdit) {
@@ -36,6 +39,9 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
       setEmail(eventToEdit.email || '');
       setPhone(eventToEdit.phone || '');
       setNotes(eventToEdit.notes || '');
+      setNotifyWeekBefore(eventToEdit.notifyWeekBefore ?? true);
+      setNotifyDayBefore(eventToEdit.notifyDayBefore ?? true);
+      setNotifyOnDay(eventToEdit.notifyOnDay ?? true);
     } else {
       setName('');
       setDate('');
@@ -44,6 +50,9 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
       setEmail('');
       setPhone('');
       setNotes('');
+      setNotifyWeekBefore(true);
+      setNotifyDayBefore(true);
+      setNotifyOnDay(true);
     }
   }, [eventToEdit, isOpen]);
 
@@ -60,6 +69,9 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
       email: email || undefined,
       phone: phone || undefined,
       notes,
+      notifyWeekBefore,
+      notifyDayBefore,
+      notifyOnDay,
     };
     onSave(newEvent);
     onClose();
@@ -68,7 +80,7 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-sm transition-opacity duration-300">
       <div 
-        className="relative w-full max-w-lg rounded-2xl bg-card p-8 shadow-xl border border-border overflow-hidden transition-all duration-300 transform scale-100 opacity-100"
+        className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-card p-8 shadow-xl border border-border transition-all duration-300 transform scale-100 opacity-100"
         role="dialog"
         aria-modal="true"
       >
@@ -194,6 +206,24 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
               className="w-full rounded-lg border border-border bg-background px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow resize-none"
               placeholder="Loves specialty coffee, hates cheesy jokes..."
             />
+          </div>
+
+          <div className="pt-2 border-t border-border mt-2">
+            <label className="block text-sm font-medium mb-3 text-primary/80">Notification Alerts (Delivered at 8:00 AM)</label>
+            <div className="space-y-2.5">
+              <label className="flex items-center gap-3 text-sm text-foreground/90 cursor-pointer">
+                <input type="checkbox" checked={notifyWeekBefore} onChange={(e) => setNotifyWeekBefore(e.target.checked)} className="h-4 w-4 rounded border-border text-primary focus:ring-primary/50 cursor-pointer" />
+                Remind me exactly one week before
+              </label>
+              <label className="flex items-center gap-3 text-sm text-foreground/90 cursor-pointer">
+                <input type="checkbox" checked={notifyDayBefore} onChange={(e) => setNotifyDayBefore(e.target.checked)} className="h-4 w-4 rounded border-border text-primary focus:ring-primary/50 cursor-pointer" />
+                Remind me the day before
+              </label>
+              <label className="flex items-center gap-3 text-sm text-foreground/90 cursor-pointer">
+                <input type="checkbox" checked={notifyOnDay} onChange={(e) => setNotifyOnDay(e.target.checked)} className="h-4 w-4 rounded border-border text-primary focus:ring-primary/50 cursor-pointer" />
+                Remind me on the day of the event
+              </label>
+            </div>
           </div>
 
           <div className="pt-4 flex justify-end gap-3">

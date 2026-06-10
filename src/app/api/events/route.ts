@@ -40,6 +40,9 @@ export async function POST(request: Request) {
         notes: data.notes,
         email: data.email,
         phone: data.phone,
+        notifyWeekBefore: data.notifyWeekBefore,
+        notifyDayBefore: data.notifyDayBefore,
+        notifyOnDay: data.notifyOnDay,
       },
     });
     return NextResponse.json(event);
