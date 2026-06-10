@@ -57,8 +57,8 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
       date,
       eventType,
       relationship,
-      email: relationship.includes('Colleague') ? email : undefined,
-      phone: relationship.includes('Colleague') ? phone : undefined,
+      email: email || undefined,
+      phone: phone || undefined,
       notes,
     };
     onSave(newEvent);
@@ -153,36 +153,34 @@ export function EventModal({ isOpen, onClose, onSave, eventToEdit }: EventModalP
             </div>
           </div>
 
-          {relationship.includes('Colleague') && (
-            <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-1 duration-200">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-1.5">
-                  Email Address
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
-                  placeholder="name@company.com"
-                />
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-1.5">
-                  Mobile Number
-                </label>
-                <input
-                  id="phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
-                  placeholder="+1 (555) 000-0000"
-                />
-              </div>
+          <div className="grid grid-cols-2 gap-4 animate-in fade-in slide-in-from-top-1 duration-200">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium mb-1.5">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                placeholder="name@company.com"
+              />
             </div>
-          )}
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium mb-1.5">
+                Mobile Number
+              </label>
+              <input
+                id="phone"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="w-full rounded-lg border border-border bg-background px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-shadow"
+                placeholder="+1 (555) 000-0000"
+              />
+            </div>
+          </div>
 
           <div>
             <label htmlFor="notes" className="block text-sm font-medium mb-1.5">
