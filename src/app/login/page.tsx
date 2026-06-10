@@ -10,11 +10,17 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [showForgotLink, setShowForgotLink] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
 
     const res = await signIn('credentials', {
       redirect: false,
@@ -23,9 +29,49 @@ export default function Login() {
     });
 
     if (res?.error) {
-      setError('Invalid email or password');
+      setError('Incorrect password.');
+      setShowForgotLink(true);
     } else {
       router.push('/');
+    }
+  };
+
+  const [isResetting, setIsResetting] = useState(false);
+
+  const handleResetSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    
+    setIsResetting(true);
+    setError('');
+
+    try {
+      const res = await fetch('/api/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, newPassword }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to reset password');
+      }
+
+      setSuccessMessage('Password updated successfully.');
+      setShowForgotPassword(false);
+      setShowForgotLink(false);
+      setNewPassword('');
+      setConfirmPassword('');
+      // Set the password field to the new password so they can just click Sign In!
+      setPassword(newPassword);
+    } catch (err: any) {
+      setError(err.message || 'Something went wrong');
+    } finally {
+      setIsResetting(false);
     }
   };
 
@@ -43,34 +89,96 @@ export default function Login() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-              required
-            />
+        {successMessage && (
+          <div className="bg-green-100 text-green-700 p-3 rounded-lg mb-6 text-sm text-center">
+            {successMessage}
           </div>
-          <div>
-            <label className="block text-sm font-medium text-foreground mb-1">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors"
-          >
-            Sign In
-          </button>
-        </form>
+        )}
+
+        {showForgotPassword ? (
+          <form onSubmit={handleResetSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">New Password</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">Confirm New Password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                required
+              />
+            </div>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(false)}
+                className="w-1/3 py-3 bg-background border border-border text-foreground font-medium rounded-lg hover:bg-muted transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isResetting}
+                className="w-2/3 py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+              >
+                {isResetting ? 'Saving...' : 'Save Password'}
+              </button>
+            </div>
+          </form>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-1">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50"
+                required
+              />
+              {showForgotLink && (
+                <div className="mt-2 text-right">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowForgotPassword(true);
+                      setError('');
+                      setSuccessMessage('');
+                    }}
+                    className="text-sm text-primary hover:underline font-medium"
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="w-full py-3 bg-primary text-primary-foreground font-medium rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              Sign In
+            </button>
+          </form>
+        )}
 
         <div className="mt-6">
           <button
