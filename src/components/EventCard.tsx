@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Event } from '@/types/event';
-import { Trash2, Edit2, Calendar, Copy, Share2, Sparkles, Loader2, Check, Mail } from 'lucide-react';
+import { Trash2, Edit2, Calendar, Copy, Share2, Sparkles, Loader2, Check, Mail, MessageCircle } from 'lucide-react';
 import { format, differenceInDays, parseISO, startOfDay } from 'date-fns';
 import { useSession } from 'next-auth/react';
 
@@ -105,6 +105,14 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
     } catch (err) {
       console.error('Failed to share text: ', err);
     }
+  };
+
+  const handleSendWhatsApp = () => {
+    if (!generatedWish) return;
+    const phone = event.phone ? event.phone.replace(/\D/g, '') : '';
+    const text = encodeURIComponent(generatedWish);
+    const url = phone ? `https://wa.me/${phone}?text=${text}` : `https://wa.me/?text=${text}`;
+    window.open(url, '_blank');
   };
 
   const handleSendMail = async () => {
@@ -261,25 +269,32 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
             <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-primary/10">
               <button 
                 onClick={handleCopy}
-                className="flex-1 min-w-[30%] flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md bg-background border border-border hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+                className="flex-1 min-w-[20%] flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md bg-background border border-border hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
               >
                 {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
-                {copied ? 'Copied' : 'Copy'}
+                Copy
               </button>
               <button 
                 onClick={handleShare}
-                className="flex-1 min-w-[30%] flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md bg-secondary/20 text-secondary-foreground hover:bg-secondary/40 transition-colors shadow-sm"
+                className="flex-1 min-w-[20%] flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md bg-secondary/20 text-secondary-foreground hover:bg-secondary/40 transition-colors shadow-sm"
               >
                 <Share2 className="h-3.5 w-3.5" />
                 Share
               </button>
               <button 
+                onClick={handleSendWhatsApp}
+                className="flex-1 min-w-[20%] flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366]/20 transition-colors shadow-sm border border-[#25D366]/20"
+              >
+                <MessageCircle className="h-3.5 w-3.5" />
+                WhatsApp
+              </button>
+              <button 
                 onClick={handleSendMail}
                 disabled={isSending}
-                className="flex-1 min-w-[30%] flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
+                className="flex-1 min-w-[20%] flex items-center justify-center gap-1.5 py-1.5 text-xs font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
               >
                 {isSending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Mail className="h-3.5 w-3.5" />}
-                {isSending ? 'Sending...' : 'Send Email'}
+                Email
               </button>
             </div>
             
