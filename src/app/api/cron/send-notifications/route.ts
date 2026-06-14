@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import webpush from 'web-push';
 import { differenceInDays, parseISO, startOfDay } from 'date-fns';
 import nodemailer from 'nodemailer';
+import { getOrdinalAgeString } from '@/lib/dateUtils';
 
 if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
   webpush.setVapidDetails(
@@ -39,20 +40,21 @@ export async function GET(request: Request) {
         }
 
         const daysUntil = differenceInDays(currentYearDate, today);
+        const displayEventType = getOrdinalAgeString(event.date, event.eventType, currentYearDate);
 
         if (daysUntil === 0 && event.notifyOnDay) {
-          notificationsToSend.push({ title: 'Event Today!', body: `Today is ${event.name}'s ${event.eventType}! 🎉` });
-          todayEvents.push(event);
+          notificationsToSend.push({ title: 'Event Today!', body: `Today is ${event.name}'s ${displayEventType}! 🎉` });
+          todayEvents.push({ ...event, displayEventType });
         } else if (daysUntil === 1 && event.notifyDayBefore) {
-          notificationsToSend.push({ title: 'Upcoming Event', body: `${event.name}'s ${event.eventType} is tomorrow! ⏰` });
+          notificationsToSend.push({ title: 'Upcoming Event', body: `${event.name}'s ${displayEventType} is tomorrow! ⏰` });
         } else if (daysUntil === 7 && event.notifyWeekBefore) {
-          notificationsToSend.push({ title: 'Upcoming Event', body: `${event.name}'s ${event.eventType} is in exactly one week! 📅` });
+          notificationsToSend.push({ title: 'Upcoming Event', body: `${event.name}'s ${displayEventType} is in exactly one week! 📅` });
         }
       });
 
       // Send Summary Email if they have events today
       if (todayEvents.length > 0 && user.smtpUser && user.smtpPass && user.email) {
-        const eventListHtml = todayEvents.map(e => `<li><b>${e.name}</b>: ${e.eventType}</li>`).join('');
+        const eventListHtml = todayEvents.map(e => `<li><b>${e.name}</b>: ${e.displayEventType}</li>`).join('');
         const htmlBody = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #db2777;">You have ${todayEvents.length} event(s) today! 🎉</h2>

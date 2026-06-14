@@ -3,6 +3,7 @@ import { Event } from '@/types/event';
 import { Trash2, Edit2, Calendar, Copy, Share2, Sparkles, Loader2, Check, Mail, MessageCircle } from 'lucide-react';
 import { format, differenceInDays, parseISO, startOfDay } from 'date-fns';
 import { useSession } from 'next-auth/react';
+import { getOrdinalAgeString } from '@/lib/dateUtils';
 
 interface EventCardProps {
   event: Event;
@@ -31,6 +32,7 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
   }
 
   const daysUntil = differenceInDays(currentYearDate, today);
+  const displayEventType = getOrdinalAgeString(event.date, event.eventType, currentYearDate);
 
   const getCountdownBadge = () => {
     if (daysUntil === 0) {
@@ -63,7 +65,7 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ ...event, feedback }),
+        body: JSON.stringify({ ...event, eventType: displayEventType, feedback }),
       });
 
       const data = await response.json();
@@ -96,7 +98,7 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
     try {
       if (navigator.share) {
         await navigator.share({
-          title: `${event.eventType} wish for ${event.name}`,
+          title: `${displayEventType} wish for ${event.name}`,
           text: generatedWish,
         });
       } else {
@@ -123,7 +125,7 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
       return;
     }
 
-    const subject = `Happy ${event.eventType} ${event.name}!`;
+    const subject = `Happy ${displayEventType} ${event.name}!`;
     
     setIsSending(true);
     setError('');
@@ -203,7 +205,7 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
       <div>
         <div className="flex items-center gap-3 mb-4">
           <span className={`px-2.5 py-1 text-xs font-semibold rounded-full transition-colors ${getCategoryColor(event.eventType)}`}>
-            {event.eventType}
+            {displayEventType}
           </span>
           {getCountdownBadge()}
         </div>
